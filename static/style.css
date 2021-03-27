@@ -1,0 +1,21 @@
+
+img.moderate-item {
+    max-height: 600px;
+}
+
+.moderate-item-container.accepted {
+    background-color: darkseagreen;
+}
+
+.moderate-item-container.rejected {
+    background-color: darksalmon;
+}
+
+.moderate-item-container .toolbox {
+    font-size: 4rem;
+}
+
+.moderate-item-container .toolbox button {
+    background: none;
+    border: none;
+}
