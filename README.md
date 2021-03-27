@@ -1,2 +1,3 @@
-# sila
+# SILA
+
 Simple Image Labeling Application
