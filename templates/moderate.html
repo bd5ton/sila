@@ -4,7 +4,7 @@
 
 {% block body%}
 <div class="container">
-  <div class="row">
+  <div class="row mb-5">
     <div class="col-md-12">
       <h2 class="mt-5 mb-5">Moderate Images ({{ num_remaining }})</h2>
 
@@ -20,8 +20,10 @@
       </div>
       {% endfor %}
 
-      <button id="btn-save" class="btn btn-lg btn-primary">Save</button>
-      <a id="btn-reload" class="btn btn-lg btn-primary" href="">Reload</a>
+      <div class='mt-5'>
+        <button id="btn-save" class="btn btn-lg btn-primary">Save</button>
+        <a id="btn-reload" class="btn btn-lg btn-primary" href="">Reload</a>
+      </div>
 
     </div>
   </div>
