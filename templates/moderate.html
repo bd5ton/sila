@@ -6,7 +6,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h2 class="mt-5 mb-5">Moderate Images</h2>
+      <h2 class="mt-5 mb-5">Moderate Images ({{ num_remaining }})</h2>
 
       {% for file in files %}
       <div class="moderate-item-container d-flex flex-row p-3" data-filename="{{ file }}">
@@ -71,16 +71,16 @@
   })
 
   function saveVerdict(url, itemContainer) {
-    fetch(url).then(response => {
+    fetch(url, {
+      method: 'POST',
+      cache: 'no-cache',
+    }).then(response => {
       if (response.ok) {
-         $(itemContainer).remove();
-
-         const numRemainingItems = $(".moderate-item-container").length;
-
-         if (0 === numRemainingItems) {
-           window.location.reload();
-         }
-
+        $(itemContainer).remove();
+        const numRemainingItems = $(".moderate-item-container").length;
+        if (0 === numRemainingItems) {
+          window.location.reload();
+        }
       } else {
         console.error(response.error);
       }
