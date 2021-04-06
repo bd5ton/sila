@@ -2,7 +2,7 @@
 """
 from flask import Blueprint, current_app
 from flask_sqlalchemy import SQLAlchemy
-from sila.models import db, Project, Phase
+from sila.models import db, Project, Phase, PhaseTypeEnum
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -12,14 +12,14 @@ def initdb():
     db.drop_all()
     db.create_all()
 
-    fp = Project(name='bla project', description='gu kha shala')
+    fp = Project(name='bla project', description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.')
     db.session.add(fp)
     db.session.commit()
-    print(Project.query.all())
 
-    ph = Phase(type='image_moderate', description='gu kheye mor shala', project=1, order=2)
-    db.session.add(ph)
+    p1 = Phase(type=PhaseTypeEnum.image_moderate, description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.', project_id=1, order=1)
+    db.session.add(p1)
+    p2 = Phase(type=PhaseTypeEnum.image_crop, description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.', project_id=1, order=2)
+    db.session.add(p2)
     db.session.commit()
-    print(Phase.query.all())
 
-    return 'Admin wants to initialize DB for SILA'
+    return 'DB for SILA initialize'

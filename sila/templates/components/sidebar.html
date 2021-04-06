@@ -1,0 +1,15 @@
+<div class='sidebar' data-color='white' data-active-color='danger'>
+  <div class='sidebar-wrapper'>
+    <ul class='nav'>
+      <li class='{% if "Dashboard" == page_title %}active{% endif %}'>
+        <a href='{{ url_for("index") }}' >Dashboard</a>
+      </li>
+      <li class='{% if "Projects" == page_title %}active{% endif %}'>
+        <a href='{{ url_for("projects.projects") }}' >Projects</a>
+      </li>
+      <li class='{% if "Projects" == page_title %}team{% endif %}'>
+        <a href='bla'>Team</a>
+      </li>
+    </ul>
+  </div>
+</div>

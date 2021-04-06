@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% from "components/_formhelpers.html" import render_field %}
+
+{% block title%}{{ page_title }} | SILA{% endblock %}
+
+{% block body%}
+<div class='wrapper'>
+  {% include 'components/sidebar.html' %}
+
+  <div class='main-panel'>
+    <div class='content'>
+      <div class='row'>
+        <div class='col-md-12'>
+          <h2 class='mb-5'>{{ page_title }}</h2>
+        </div>
+      </div>
+
+      <div class='row'>
+        <div class='col-md-12'>
+          <div class='card'>
+            <div class='card-body'>
+              <form method='post'>
+                {% for field in form %}
+                  {{ render_field(field) }}
+                {% endfor %}
+                <input type='submit' value='Save' class='btn btn-info btn-fill btn-wd' >
+                {% if form.id.data %}
+                <input type='submit' value='Delete' name='delete' class='btn btn-danger btn-fill btn-wd pull-right' >
+                {% endif %}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
