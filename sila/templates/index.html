@@ -1,36 +1,59 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block title%}Dashboard | SILA{% endblock %}
 
 {% block body%}
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h2 class="mt-5 mb-5">Select a task stream</h2>
+<div class='wrapper'>
+  <div class='sidebar' data-color='white' data-active-color='danger'>
+    <div class='sidebar-wrapper'>
+      <ul class='nav'>
+        <li>
+          <a href='bla'>Projects</a>
+        </li>
+        <li>
+          <a href='bla'>Team</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 
-          <div class="card-group">
+  <div class='main-panel'>
+    <div class='content'>
+      <div class='-container'>
+        <div class='row'>
+          <div class='col-md-12'>
+            <h2 class='mt-5 mb-5'>Select a task stream</h2>
 
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Image Moderation</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Approve or reject images</h6>
-                <p class="card-text">Look at random images from a pool of raw images. Approve images that meet the quality standards and reject the ones that do not.</p>
-                <a href="{{ url_for('task.moderate') }}" class="btn btn-primary">Start</a>
+            <div class='card-group'>
+
+              <div class='card'>
+                <div class='card-body'>
+                  <h5 class='card-title'>Image Moderation</h5>
+                  <h6 class='card-subtitle mb-2 text-muted'>Approve or reject images</h6>
+                  <p class='card-text'>Look at random images from a pool of raw images. Approve images that meet the quality standards and reject the ones that do not.</p>
+                  <a href='{{ url_for("task.moderate") }}'' class='btn btn-primary'>Start</a>
+                </div>
               </div>
-            </div>
 
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Image Slicing</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Crop useful bits</h6>
-                <p class="card-text">Not everything in an image is useful. In this task you shall crop out useful parts from an image.</p>
-                <a href="{{ url_for('index') }}" class="btn btn-primary">Start</a>
+              <div class='card'>
+                <div class='card-body'>
+                  <h5 class='card-title'>Image Slicing</h5>
+                  <h6 class='card-subtitle mb-2 text-muted'>Crop useful bits</h6>
+                  <p class='card-text'>Not everything in an image is useful. In this task you shall crop out useful parts from an image.</p>
+                  <a href='{{ url_for("index") }}' class='btn btn-primary'>Start</a>
+                </div>
               </div>
+
             </div>
 
           </div>
-
         </div>
       </div>
     </div>
+  </div>
+
+
+</div>
+
+
 {% endblock %}
