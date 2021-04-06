@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     rm -rf .pip-cache
 
 # Copy the current directory contents into the container at /app
-ADD . /app
+ADD ./sila /app/sila
 
 # Set entrypoint to the container
 CMD ["flask", "run", "--host=0.0.0.0", "--port=8000"]
