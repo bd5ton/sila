@@ -69,3 +69,17 @@ def project_edit(project_id):
     else:
         form = ProjectForm(name=project.name, description=project.description, id=project.id)
         return _render_with_form(form)
+
+@bp.route('/<int:project_id>/phase/<int:phase_order>/remove', methods=['POST'])
+def project_remove_phase(project_id, phase_order):
+
+    project = Project.query.get(project_id)
+    phase = project.phases.filter(Phase.order==phase_order).first() # Phase.query.get(phase_id)
+
+    print(project_id)
+    print(phase)
+
+    db.session.delete(phase)
+    db.session.commit()
+
+    return redirect(url_for('projects.project_edit', project_id=project_id))

@@ -8,7 +8,7 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=False, nullable=False)
     description = db.Column(db.Text(2000))
-    phases = db.relationship('Phase', backref='project')
+    phases = db.relationship('Phase', backref='project', lazy='dynamic')
 
     def __repr__(self):
         return '<Project {} {}>'.format(self.id, self.name)

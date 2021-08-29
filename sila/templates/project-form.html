@@ -33,6 +33,35 @@
         </div>
       </div>
 
+      <div class='row'>
+        <div class='col-md-12'>
+          <div class='card'>
+            <div class='card-body'>
+              <h4 class="card-title">Phases</h4>
+              <div calss='table-responsive'>
+                <table class='table'>
+                  {% for phase in project.phases %}
+                  <form
+                    method='post'
+                    action='{{ url_for("projects.project_remove_phase", project_id=project.id, phase_order=phase.order) }}'
+                    onsubmit='return confirm("Do you really want to remove this phase from the project?");'
+                  >
+                    <tr>
+                      <td>{{ phase.order }}</td>
+                      <td>{{ phase.type.to_name() }}</td>
+                      <td>
+                        <button class='pull-right btn btn-danger btn-sm btn-delete-phase' data-project-id='{{ project_id }}' data-phase-order='{{ phase.order }}'><i class='fa fa-times'></i></button>
+                      </td>
+                    </tr>
+                  </form>
+                  {% endfor %}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
