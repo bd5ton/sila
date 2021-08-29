@@ -25,7 +25,7 @@ class PhaseTypeEnum(Enum):
             self.image_text_detection.value: 'image text detection',
             self.image_crop.value: 'image crop',
         }
-        print(PHASE_TYPE_NAMES)
+
         return PHASE_TYPE_NAMES[self.value]
 
 
