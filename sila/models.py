@@ -9,6 +9,7 @@ class Project(db.Model):
     name = db.Column(db.String(100), unique=False, nullable=False)
     description = db.Column(db.Text(2000))
     phases = db.relationship('Phase', backref='project', lazy='dynamic')
+    current_phase = db.Column(db.Integer, default=1)
 
     def __repr__(self):
         return '<Project {} {}>'.format(self.id, self.name)

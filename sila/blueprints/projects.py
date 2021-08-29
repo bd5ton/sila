@@ -1,7 +1,7 @@
 """Project related endpoints.
 """
 
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import abort, Blueprint, render_template, request, flash, redirect, url_for
 
 from sila.models import db, Project, Phase, PhaseTypeEnum
 from sila.forms import ProjectForm, PhaseForm
@@ -92,9 +92,20 @@ def project_add_phase(project_id):
 def project_remove_phase(project_id, phase_order):
 
     project = Project.query.get(project_id)
-    phase = project.phases.filter(Phase.order==phase_order).first() # Phase.query.get(phase_id)
+    phase = project.phases.filter(Phase.order==phase_order).first()
 
     db.session.delete(phase)
     db.session.commit()
 
     return redirect(url_for('projects.project_edit', project_id=project_id))
+
+@bp.route('/<int:project_id>/phase/<int:phase_order>/work', methods=['GET'])
+def project_work_phase(project_id, phase_order):
+
+    project = Project.query.get(project_id)
+    phase = project.phases.filter(Phase.order==phase_order).first()
+
+    if project.current_phase != phase.order:
+        abort(404)
+
+    return render_template('work.html', project=project, phase=phase)

@@ -50,7 +50,11 @@
                       </td>
                       <td>
                         {% for phase in project.phases %}
-                        {{ phase.order }}. {{ phase.type.to_name() }}<br>
+                          {{ phase.order }}. {{ phase.type.to_name() }}
+                          {% if project.current_phase == phase.order %}
+                          <a class='btn btn-primary btn-sm' href='{{ url_for("projects.project_work_phase", project_id=project.id, phase_order=phase.order) }}'>Launch</a>
+                          {% endif %}
+                          <br>
                         {% endfor %}
                       </td>
                       <td class="text-right">n/a</td>
