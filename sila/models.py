@@ -35,6 +35,8 @@ class Phase(db.Model):
     order = db.Column(db.Integer, nullable=False)
     type = db.Column(db.Enum(PhaseTypeEnum), unique=False, nullable=False)
     description = db.Column(db.Text(5000))
+    src_dir = db.Column(db.Text(5000))
+    dest_dir = db.Column(db.Text(5000))
 
     db.UniqueConstraint('project_id', 'order', name='unique__phase_order__project_id')
 

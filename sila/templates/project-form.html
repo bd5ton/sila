@@ -40,22 +40,36 @@
               <h4 class="card-title">Phases</h4>
               <div calss='table-responsive'>
                 <table class='table'>
-                  {% for phase in project.phases %}
-                  <form
-                    method='post'
-                    action='{{ url_for("projects.project_remove_phase", project_id=project.id, phase_order=phase.order) }}'
-                    onsubmit='return confirm("Do you really want to remove this phase from the project?");'
-                  >
+                  <thead class=" text-primary">
                     <tr>
-                      <td>{{ phase.order }}</td>
-                      <td>{{ phase.type.to_name() }}</td>
-                      <td>
-                        <button class='pull-right btn btn-danger btn-sm btn-delete-phase' data-project-id='{{ project_id }}' data-phase-order='{{ phase.order }}'><i class='fa fa-times'></i></button>
-                      </td>
+                      <th>Order</th>
+                      <th>Type</th>
+                      <th>Source directory<a href='#image-storage-root'>*</a></th>
+                      <th>Destination directory<a href='#image-storage-root'>*</a></th>
+                      <th class="text-right"></th>
                     </tr>
-                  </form>
-                  {% endfor %}
+                  </thead>
+                  <tbody>
+                    {% for phase in project.phases %}
+                    <form
+                      method='post'
+                      action='{{ url_for("projects.project_remove_phase", project_id=project.id, phase_order=phase.order) }}'
+                      onsubmit='return confirm("Do you really want to remove this phase from the project?");'
+                    >
+                      <tr>
+                        <td>{{ phase.order }}</td>
+                        <td>{{ phase.type.to_name() }}</td>
+                        <td><i class='far fa-folder'></i> {{ phase.src_dir }}</td>
+                        <td><i class='far fa-folder'></i> {{ phase.dest_dir }}</td>
+                        <td>
+                          <button class='pull-right btn btn-danger btn-sm btn-delete-phase' data-project-id='{{ project_id }}' data-phase-order='{{ phase.order }}'><i class='fa fa-times'></i></button>
+                        </td>
+                      </tr>
+                    </form>
+                    {% endfor %}
+                  </tbody>
                 </table>
+                <span id='image-storage-root'><span>*</span> Relative to IMAGE_STORAGE_ROOT.</span>
               </div>
             </div>
           </div>

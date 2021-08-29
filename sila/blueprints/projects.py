@@ -79,8 +79,10 @@ def project_add_phase(project_id):
     project = Project.query.get(project_id)
     phase_type = PhaseTypeEnum(int(request.form.get('type')))
     order = len(project.phases.all()) + 1
+    src_dir = request.form.get('src_dir')
+    dest_dir = request.form.get('dest_dir')
 
-    phase = Phase(project=project, type=phase_type, order=order)
+    phase = Phase(project=project, type=phase_type, order=order, src_dir=src_dir, dest_dir=dest_dir)
     db.session.add(phase, )
     db.session.commit()
 
