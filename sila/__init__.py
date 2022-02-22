@@ -4,12 +4,10 @@ import os
 import time
 
 from .models import db, Project
-from .blueprints import tasks as tasks_bp
 from .blueprints import admin as admin_bp
 from .blueprints import projects as projects_bp
 
 app = Flask(__name__, static_folder='static')
-app.register_blueprint(tasks_bp.bp)
 app.register_blueprint(admin_bp.bp)
 app.register_blueprint(projects_bp.bp)
 
@@ -44,3 +42,8 @@ def get_status():
 @app.route('/health')
 def health():
     return get_status()
+
+@app.route('/wip')
+def wip():
+    return render_template('wip.html')
+

@@ -38,6 +38,7 @@ class Phase(db.Model):
     description = db.Column(db.Text(5000))
     src_dir = db.Column(db.Text(5000))
     dest_dir = db.Column(db.Text(5000))
+    reject_dir = db.Column(db.Text(5000))
 
     db.UniqueConstraint('project_id', 'order', name='unique__phase_order__project_id')
 

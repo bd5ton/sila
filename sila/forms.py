@@ -13,3 +13,4 @@ class PhaseForm(Form):
     type = SelectField('type', choices=type_choices)
     src_dir = StringField('Directory (relative to SOURCE_ROOT) containing input image files for this phase.', [validators.Length(min=1, max=5000)], default='/')
     dest_dir = StringField('Directory (relative to SOURCE_ROOT) where processed images should be stored.', [validators.Length(min=1, max=5000)], default='/')
+    reject_dir = StringField('Directory (relative to SOURCE_ROOT) where rejected images should be stored.', [validators.Length(min=1, max=5000)], default='/')

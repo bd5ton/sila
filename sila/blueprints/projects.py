@@ -1,13 +1,17 @@
 """Project related endpoints.
 """
+import os
+import random
+from shutil import move
 
-from flask import abort, Blueprint, render_template, request, flash, redirect, url_for
+from flask import abort, Blueprint, render_template, request, flash, redirect, url_for, send_from_directory
 
 from sila.models import db, Project, Phase, PhaseTypeEnum
 from sila.forms import ProjectForm, PhaseForm
 
 bp = Blueprint('projects', __name__, url_prefix='/projects')
 
+MODERATE_SAMPLE_SIZE = 5
 
 @bp.route('/', methods=['GET'])
 def projects():
@@ -81,8 +85,9 @@ def project_add_phase(project_id):
     order = len(project.phases.all()) + 1
     src_dir = request.form.get('src_dir')
     dest_dir = request.form.get('dest_dir')
+    reject_dir = request.form.get('reject_dir')
 
-    phase = Phase(project=project, type=phase_type, order=order, src_dir=src_dir, dest_dir=dest_dir)
+    phase = Phase(project=project, type=phase_type, order=order, src_dir=src_dir, dest_dir=dest_dir, reject_dir=reject_dir)
     db.session.add(phase, )
     db.session.commit()
 
@@ -108,4 +113,65 @@ def project_work_phase(project_id, phase_order):
     if project.current_phase != phase.order:
         abort(404)
 
-    return render_template('work.html', project=project, phase=phase)
+    SRC_DIR = os.path.join(os.environ['IMAGE_STORAGE_ROOT'], phase.src_dir)
+
+    all_files = [f for f in os.listdir(SRC_DIR) if not f.startswith('.')]
+    ALLOWED_FILE_EXTENSIONS = ''
+    num_remaining = len(all_files)
+    try:
+        files = random.sample(all_files, MODERATE_SAMPLE_SIZE)
+    except ValueError:
+        files = all_files
+
+    data = {
+        'project': project,
+        'phase': phase,
+        'num_remaining': num_remaining,
+        'files': files,
+        'page_title': f'Phase - {phase.order} | {project.name}',
+    }
+
+    return render_template('work.html', **data)
+
+@bp.route('/<int:project_id>/phase/<int:phase_order>/image/<path:filename>', methods=['GET'])
+def project_phase_get_image(project_id, phase_order, filename):
+
+    project = Project.query.get(project_id)
+    phase = project.phases.filter(Phase.order==phase_order).first()
+
+    if project.current_phase != phase.order:
+        abort(404)
+
+    SRC_DIR = os.path.join(os.environ['IMAGE_STORAGE_ROOT'], phase.src_dir)
+
+    return send_from_directory(SRC_DIR, filename)
+
+@bp.route('/<int:project_id>/phase/<int:phase_order>/image/<path:filename>/accept', methods=['POST'])
+def project_phase_accept_image(project_id, phase_order, filename):
+
+    project = Project.query.get(project_id)
+    phase = project.phases.filter(Phase.order==phase_order).first()
+
+    if project.current_phase != phase.order:
+        abort(404)
+
+    src = os.path.join(os.environ['IMAGE_STORAGE_ROOT'], phase.src_dir, filename)
+    dst = os.path.join(os.environ['IMAGE_STORAGE_ROOT'], phase.dest_dir, filename)
+
+    move(src, dst)
+    return ('', 204)
+
+@bp.route('/<int:project_id>/phase/<int:phase_order>/image/<path:filename>/reject', methods=['POST'])
+def project_phase_reject_image(project_id, phase_order, filename):
+
+    project = Project.query.get(project_id)
+    phase = project.phases.filter(Phase.order==phase_order).first()
+
+    if project.current_phase != phase.order:
+        abort(404)
+
+    src = os.path.join(os.environ['IMAGE_STORAGE_ROOT'], phase.src_dir, filename)
+    dst = os.path.join(os.environ['IMAGE_STORAGE_ROOT'], phase.reject_dir, filename)
+
+    move(src, dst)
+    return ('', 204)

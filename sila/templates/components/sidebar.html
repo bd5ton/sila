@@ -8,7 +8,7 @@
         <a href='{{ url_for("projects.projects") }}' >Projects</a>
       </li>
       <li class='{% if "Projects" == page_title %}team{% endif %}'>
-        <a href='bla'>Team</a>
+        <a href='{{ url_for("wip") }}'>Team</a>
       </li>
     </ul>
   </div>

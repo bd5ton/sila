@@ -1,19 +1,130 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Moderate Images{% endblock %}
+{% block title %}kaj{% endblock %}
 
 {% block body%}
-<div class="container">
-  <div class="row mb-5">
-    <div class="col-md-12">
-      hello world
+<div class='wrapper'>
+  {% include 'components/sidebar.html' %}
+
+  <div class='main-panel'>
+    <div class='content'>
+      <div class='-container'>
+        <div class='row'>
+          <div class='col-md-12'>
+            <h2 class='mt-5 mb-5'>{{ project.name }} - Phase - {{ phase.order }}: {{ phase.type.to_name() }}</h2>
+
+            <table class='table'>
+              <tr>
+                <td>Source directory</td>
+                <td>{{ phase.src_dir }}</td>
+              </tr>
+              <tr>
+                <td>Destination directory</td>
+                <td>{{ phase.dest_dir }}</td>
+              </tr>
+              <tr>
+                <td>Reject directory</td>
+                <td>{{ phase.reject_dir }}</td>
+              </tr>
+              <tr>
+                <td>Remaining images</td>
+                <td>{{ num_remaining }}</td>
+              </tr>
+            </table>
+
+            {% for file in files %}
+            <div class='card moderate-item-container'>
+              <div class='card-body'>
+                <div class='moderate-item-container d-flex flex-row' data-filename="{{ file }}">
+                  <div class="toolbox d-flex flex-column justify-content-around mr-3">
+                    <button class="btn-reject" data-filename="{{ file }}"><i class="fas fa-times"></i></a></button>
+                    <button class="btn-accept" data-filename="{{ file }}"><i class="fas fa-check"></i></a></button>
+                  </div>
+                  <a href="{{ url_for('projects.project_phase_get_image', project_id=project.id, phase_order=phase.order, filename=file) }}" target="_blank">
+                    <img src="{{ url_for('projects.project_phase_get_image', project_id=project.id, phase_order=phase.order, filename=file) }}" class="moderate-item img-fluid" />
+                  </a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+            <div class='mt-5'>
+              <button id="btn-save" class="btn btn-lg btn-primary">Save</button>
+              <a id="btn-reload" class="btn btn-lg btn-primary" href="">Reload</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
 </div>
+
 {% endblock %}
 
 {% block body_script %}
 <script>
+
+  $(document).ready(() => {
+    $("button.btn-reject").click((event) => {
+      const target = $(event.target).closest("button.btn-reject")[0];
+      const itemContainer = $(target).closest(".moderate-item-container");
+      $(itemContainer).removeClass('accepted');
+      $(itemContainer).addClass('rejected');
+    })
+
+    $("button.btn-accept").click((event) => {
+      const target = $(event.target).closest("button.btn-accept")[0];
+
+      const itemContainer = $(target).closest(".moderate-item-container");
+      $(itemContainer).removeClass('rejected');
+      $(itemContainer).addClass('accepted');
+    })
+
+    $("#btn-save").click(() => {
+      const acceptedItems = $(".moderate-item-container.accepted")
+        .map(function() { return $(this).data("filename") })
+        .toArray();
+
+      const rejectedItems = $(".moderate-item-container.rejected")
+        .map(function() { return $(this).data("filename") })
+        .toArray();
+
+      console.log(acceptedItems)
+      console.log(rejectedItems)
+
+      acceptedItems.forEach((item) => {
+        const url = "{{ url_for('projects.project_phase_accept_image', project_id=project.id, phase_order=phase.order, filename='__filename__') }}".replace("__filename__", item);
+        const itemContainer = $(`.moderate-item-container[data-filename='${item}']`);
+        console.log(url)
+        saveVerdict(url, itemContainer);
+      })
+
+      rejectedItems.forEach((item) => {
+        const url = "{{ url_for('projects.project_phase_reject_image', project_id=project.id, phase_order=phase.order, filename='__filename__') }}".replace("__filename__", item);
+        const itemContainer = $(`.moderate-item-container[data-filename='${item}']`);
+        saveVerdict(url, itemContainer);
+      })
+    })
+  })
+
+  function saveVerdict(url, itemContainer) {
+    fetch(url, {
+      method: 'POST',
+      cache: 'no-cache',
+    }).then(response => {
+      if (response.ok) {
+        $(itemContainer).remove();
+        const numRemainingItems = $(".moderate-item-container").length;
+        if (0 === numRemainingItems) {
+          window.location.reload();
+        }
+      } else {
+        console.error(response);
+      }
+    })
+  }
 
 </script>
 {% endblock %}
